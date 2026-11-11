@@ -1,0 +1,46 @@
+{
+  "name": "mixin-stubber",
+  "kicker": "codegen cli",
+  "subtitle": "auto-Mixin stubs for Minecraft.",
+  "avatar": "at",
+  "hero_pills": [
+    ["pin", "Python 3.9+ · stdlib only"],
+    ["code", "Core: @Inject · @Redirect · @At"]
+  ],
+  "pills": [
+    {"id": "ru", "icon": "book", "label": "README RU"},
+    {"id": "en", "icon": "book", "label": "README EN"},
+    {"id": "release", "icon": "tag", "label": "Releases"},
+    {"id": "ci", "icon": "check", "label": "CI"},
+    {"id": "license", "icon": "doc", "label": "MIT"}
+  ],
+  "sections": {
+    "en": [
+      ["about", "About", "doc"],
+      ["features", "Features", "star"],
+      ["formats", "Signature formats", "book"],
+      ["stack", "Tech stack", "code"],
+      ["quick", "Quick start", "play"],
+      ["shots", "Screenshots", "image"],
+      ["tests", "Tests", "check"]
+    ],
+    "ru": [
+      ["about", "О проекте", "doc"],
+      ["features", "Возможности", "star"],
+      ["formats", "Форматы сигнатур", "book"],
+      ["stack", "Технологии", "code"],
+      ["quick", "Быстрый старт", "play"],
+      ["shots", "Скриншоты", "image"],
+      ["tests", "Тесты", "check"]
+    ]
+  },
+  "chips": {
+    "MAIN": ["Python 3.9+", "unittest", "JVM descriptors"],
+    "TOOLS": ["GitHub Actions", "Pillow (docs)", "SpongePowered Mixin"]
+  },
+  "stats": [
+    ["33", "tests"],
+    ["3", "OSes in CI"],
+    ["v1.0.0", "latest release"]
+  ]
+}

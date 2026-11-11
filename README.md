@@ -1,9 +1,13 @@
-# mixin-stubber
+<p align="center"><img src="docs/style/hero.png" alt="mixin-stubber — auto-Mixin stubs for Minecraft" width="100%"></p>
 
-[![CI](https://github.com/Celine1337/mixin-stubber/actions/workflows/ci.yml/badge.svg)](https://github.com/Celine1337/mixin-stubber/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/Celine1337/mixin-stubber)](https://github.com/Celine1337/mixin-stubber/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+<p align="center">
+  <a href="README.ru.md"><img src="docs/style/pill-ru.png" alt="README RU" height="42"></a>
+  <a href="https://github.com/Celine1337/mixin-stubber/releases"><img src="docs/style/pill-release.png" alt="Releases" height="42"></a>
+  <a href="https://github.com/Celine1337/mixin-stubber/actions/workflows/ci.yml"><img src="docs/style/pill-ci.png" alt="CI" height="42"></a>
+  <a href="LICENSE"><img src="docs/style/pill-license.png" alt="MIT" height="42"></a>
+</p>
+
+<img src="docs/style/sec-about-en.png" alt="About" width="100%">
 
 Paste a vanilla Minecraft method signature — get a ready-to-use SpongePowered
 `@Mixin` class: `@Inject` / `@Redirect`, `at = @At(...)`, `CallbackInfo` /
@@ -13,9 +17,7 @@ Single file, standard library only, Python 3.9+. Understands Mojmap,
 intermediary and SRG names. Fabric or Forge — the generated stub is plain
 Mixin, drop it into your mod and fill in the `TODO`.
 
-![inject example](docs/inject.png)
-
-## Features
+<img src="docs/style/sec-features-en.png" alt="Features" width="100%">
 
 - **Five signature formats** — ASM, `Class#method(descriptor)`, readable Java,
   return-first, and bare intermediary/SRG names (see below).
@@ -35,7 +37,31 @@ Mixin, drop it into your mod and fill in the `TODO`.
 - stdout or `--out File.java` (`--force` to overwrite); interactive prompt when
   run without arguments.
 
-## Quick start
+<img src="docs/style/sec-formats-en.png" alt="Signature formats" width="100%">
+
+| Format | Example |
+| --- | --- |
+| ASM | `Lnet/minecraft/client/Minecraft;->runTick()V` |
+| Hash + JVM descriptor | `net.minecraft.client.Minecraft#runTick()V` |
+| Readable Java | `net.minecraft.client.Minecraft.runTick(boolean)` |
+| Return-first | `int net.minecraft.util.Mth#clamp(int,int,int)` |
+| Bare (intermediary / SRG) | `net.minecraft.class_310#method_1523` |
+
+- JVM descriptors (`(IF)Ljava/lang/String;`, arrays, primitives) are parsed and
+  turned back into Java types for the handler signature.
+- Readable types rebuild the descriptor when every type is fully qualified or
+  primitive; otherwise the `method` string falls back to the bare name.
+- Bare names (no parentheses) generate a stub plus a
+  `// NOTE: no descriptor given - add one if the target method is overloaded`
+  comment — handy for intermediary/SRG where you only have `class_310#method_1523`.
+- `INVOKE` / redirect targets must carry a return type (`int pkg.Cls#m(int)` or
+  `Lpkg/Cls;->m(I)I`); guessing `V` would silently produce a broken stub.
+
+<img src="docs/style/sec-stack-en.png" alt="Tech stack" width="100%">
+
+<img src="docs/style/chips.png" alt="Python 3.9+, unittest, JVM descriptors; GitHub Actions, Pillow, SpongePowered Mixin" width="100%">
+
+<img src="docs/style/sec-quick-en.png" alt="Quick start" width="100%">
 
 ```console
 $ python mixin_stubber.py "net.minecraft.world.entity.player.Player#tick()V"
@@ -62,35 +88,6 @@ public abstract class PlayerMixin {
 
 No install, no dependencies — clone and run.
 
-## Signature formats
-
-| Format | Example |
-| --- | --- |
-| ASM | `Lnet/minecraft/client/Minecraft;->runTick()V` |
-| Hash + JVM descriptor | `net.minecraft.client.Minecraft#runTick()V` |
-| Readable Java | `net.minecraft.client.Minecraft.runTick(boolean)` |
-| Return-first | `int net.minecraft.util.Mth#clamp(int,int,int)` |
-| Bare (intermediary / SRG) | `net.minecraft.class_310#method_1523` |
-
-Notes:
-
-- JVM descriptors (`(IF)Ljava/lang/String;`, arrays, primitives) are parsed and
-  turned back into Java types for the handler signature.
-- Readable types rebuild the descriptor when every type is fully qualified or
-  primitive; otherwise the `method` string falls back to the bare name.
-- Bare names (no parentheses) generate a stub plus a
-  `// NOTE: no descriptor given - add one if the target method is overloaded`
-  comment — handy for intermediary/SRG where you only have `class_310#method_1523`.
-
-## Modes and flags
-
-```console
-$ python mixin_stubber.py SIGNATURE [--mode inject|redirect] [--at HEAD|TAIL|RETURN|INVOKE]
-                                    [--target SIG] [--target-static] [--static]
-                                    [--cancellable] [--package PKG] [--name NAME]
-                                    [--out FILE] [--force]
-```
-
 | Flag | Meaning |
 | --- | --- |
 | `--mode` | `inject` (default) or `redirect` |
@@ -103,27 +100,16 @@ $ python mixin_stubber.py SIGNATURE [--mode inject|redirect] [--at HEAD|TAIL|RET
 | `--name` | mixin class name (default `<Target>Mixin`) |
 | `--out` / `--force` | write to a file / overwrite it |
 
-### Redirect
-
-```console
-$ python mixin_stubber.py "net.minecraft.client.Minecraft#runTick()V" --mode redirect \
-    --target "Lnet/minecraft/client/gui/Gui;->render(Lnet/minecraft/client/gui/GuiGraphics;F)V"
-```
-
-![redirect example](docs/redirect.png)
-
-The handler receives the receiver instance (`Gui gui`) followed by the target's
-arguments, returns the target's return type, and starts with a passthrough call
-so the stub compiles and behaves identically until you edit it.
-
-### More examples
+Redirect: the handler receives the receiver instance (`Gui gui`) followed by
+the target's arguments, returns the target's return type, and starts with a
+passthrough call so the stub compiles and behaves identically until you edit it.
 
 ```console
 # non-void RETURN: CallbackInfoReturnable + cancellable + setReturnValue hint
 $ python mixin_stubber.py "net.minecraft.world.entity.player.Player#getFoodData()Lnet/minecraft/world/food/FoodData;" --at RETURN
 
 # static target: no receiver, static passthrough
-$ python mixin_stubber.py "net.minecraft.util.Mth#clamp(III)I" --mode redirect \
+$ python mixin_stubber.py "net.minecraft.world.entity.player.Player#tick()V" --mode redirect \
     --target "int net.minecraft.util.Mth#clamp(int,int,int)" --target-static
 
 # constructor injection
@@ -133,7 +119,13 @@ $ python mixin_stubber.py "net.minecraft.world.entity.player.Player#<init>(Lnet/
 $ python mixin_stubber.py "net.minecraft.class_310#method_1523" --package dev.mymod.mixin --out src/main/java/dev/mymod/mixin/MinecraftClientMixin.java
 ```
 
-## Tests
+<img src="docs/style/sec-shots-en.png" alt="Screenshots" width="100%">
+
+![inject example](docs/inject.png)
+
+![redirect example](docs/redirect.png)
+
+<img src="docs/style/sec-tests-en.png" alt="Tests" width="100%">
 
 ```console
 $ python -m unittest discover -s tests -v
@@ -141,15 +133,14 @@ $ python -m unittest discover -s tests -v
 
 33 tests cover parsing (all formats, arrays, generics, constructors, bad input)
 and generation (inject/redirect, static, cancellable, imports, CLI).
-
-## Regenerating the screenshots
+Screenshots and card assets are regenerable:
 
 ```console
 $ pip install pillow
 $ python tools/make_shots.py        # docs/inject.png, docs/redirect.png
-$ python tools/social_preview.py    # docs/social-preview.png (repo social card)
+$ python tools/make_style.py tools/style.json docs/style
 ```
 
-## License
+<img src="docs/style/stats.png" alt="33 tests, 3 OSes in CI, v1.0.0" width="100%">
 
-[MIT](LICENSE)
+[MIT](LICENSE) © Celine1337
