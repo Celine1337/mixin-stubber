@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+docs/_*.java
+*.egg-info/
+.idea/
+.vscode/
